@@ -23,7 +23,7 @@ def index():
         category = item["category"]
         if category not in categories:
             categories[category] = []
-        categories[category].append(item)
+        categories[category].append({"id": item["id"], "name": item["name"]})
     
     return render_template('index.html', dic=categories)
 
@@ -37,11 +37,14 @@ def parsing():
     
     # Mengelompokkan data berdasarkan kategori 
     categories = {}
-    for item in data:
+    for item in data:  # Menggunakan data dari request
         category = item["category"]
+        sub_category = item["sub_category"]
         if category not in categories:
-            categories[category] = []
-        categories[category].append(item)
+            categories[category] = {}
+        if sub_category not in categories[category]:
+            categories[category][sub_category] = []
+        categories[category][sub_category].append(item)
         
     return render_template('index.html', dic=categories)
 
